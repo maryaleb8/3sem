@@ -1,6 +1,6 @@
 /*упрощенный ls -la(в т ч скрытые файлы): вывести список записей в текущем
 каталоге без рекурсии вывести только тип записи, имя записи*/
-#define _DEFAULT_SOURCE
+// удалить это или разобраться #define _DEFAULT_SOURCE
 #include <sys/types.h>
 #include <dirent.h>
 #include <stdio.h>
@@ -44,7 +44,7 @@ int main(int argc, char const *argv[]) {
         return 1;
     }
     DIR * dir_fd;
-    if(argc == 2 && chdir(argv[1]) == -1) {
+    if(argc == 2 && chdir(argv[1]) == -1) {// у чидира проблемы убрать их нафиг
         perror("Failure in chdir");
         return 2;
     }
