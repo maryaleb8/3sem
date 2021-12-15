@@ -1,7 +1,12 @@
-cd Desktop/Documents/3sem
+cd Documents/3sem
 git status
 1) git add path.name
 git add .       добавить все файлы
 git restore --staged file.name     удалить файлы из предкомита
 2) git commit -m "comment"
 3) git push 3sem
+
+
+git config --global credential.helper cache
+git config --global credential.helper 'cache --timeout=3600'
+не вводить пароль каждый раз
