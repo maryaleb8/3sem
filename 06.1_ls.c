@@ -1,10 +1,12 @@
 /*упрощенный ls -la(в т ч скрытые файлы): вывести список записей в текущем
 каталоге без рекурсии вывести только тип записи, имя записи*/
+//разобраться с отступами
 #include <sys/types.h>
 #include <dirent.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/stat.h>
+//редактировать библиотеки, могли удалить файл но мы прочитали название
 
 
 char dtype_letter(unsigned d_type) {
@@ -46,7 +48,10 @@ int main(int argc, char const *argv[]) {
     }
 
     struct dirent * entry;
-  	while((entry = readdir(dir_fd)) != NULL) {
+  	while(1) {
+		errno = 0;
+	struct dirent *entry = readdir(dir_fd);
+		if (entry == NULL)// нул возвращается не только в плохом случае и нужно обрабатывать
         char type = dtype_letter(entry->d_type);
         if(type == '?') {
         		struct stat sb;
@@ -58,10 +63,10 @@ int main(int argc, char const *argv[]) {
                 return 3;
             }
     		}
-    		printf("%c %s\n", type, entry->d_name);
+    		printf("%c %s\n", type, entry->d_name);//исправить
   	}
 
-    if(closedir(dir_fd) == -1) {
+    if(closedir(dir_fd) == -1) {//можно не проверять потому что дескриптор норм
         perror("Failure in closedir");
         return 4;
     }
