@@ -5,7 +5,7 @@ fstat идентична stat, только возвращается инфор�
 на который указывает filedes (возвращаемый open(2)), а не о file_name.
 
 */
-
+// gcc -Werror -Wall -Wextra -Wnarrowing -Wconversion -Wwrite-strings -Wcast-qual -Wundef -Wstrict-prototypes -Wbad-function-cast -Wlogical-op -Wreturn-type -g -O2 -fwhole-program 01_stat.c -o 01_stat.exe 
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <time.h>
