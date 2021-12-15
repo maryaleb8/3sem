@@ -10,7 +10,7 @@
 
 int main(int argc, char* argv[]) {
     if(argc != 3) {
-        fprintf(stderr, "Usage: %s filename string\n", argv[0]);
+        fprintf(stderr, "Usage: %s source destination\n", argv[0]);
         return 1;
     }
 
