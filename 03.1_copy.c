@@ -22,18 +22,20 @@ int main(int argc, char* argv[]) {
     int fd2 = open(argv[2], O_WRONLY | O_CREAT | O_TRUNC, 0644);
     if(fd2 < 0) {
         perror("Failure in opening second file");
+        //close для входлного открывания
         return 3;
     }
 
     struct stat sb;
-    lstat(argv[1], &sb);
-    if (((sb.st_mode) & (S_IFMT)) != S_IFREG) {
+    //if (lstat((argv[1], &sb
+    lstat(argv[1], &sb);//обработать ошибку, сначала стат, потом открываем, нам нужно только то что открыть нужно
+    if ((sb.st_mode & S_IFMT) != S_IFREG) { //слишком страшная строка, макросы if(!S_ISREG(sb.st_mode))
         perror("Not a regular file");
         return 4;
     }
 
-    char text [sb.st_size];
-    if (read(fd1, &text, sb.st_size) == -1) {
+    char text [sb.st_size];//слишком мало памяти, нужно авести буфер размера, нужно сравнить числа которые мы считали и изначальный размер файла
+    if (read(fd1, &text, sb.st_size) == -1) {//write all
         perror("Failed to read first file");
         return 5;
     }
