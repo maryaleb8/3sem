@@ -35,7 +35,7 @@ int main(int argc, char* argv[]) {
 
     if(write_all(fd, argv[2], strlen(argv[2])) < 0) {
         perror("Failure in writing");
-        close(fd);
+        close(fd); //один на всех сделать, например через переменную result
         return 3;
     }
 
