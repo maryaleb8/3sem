@@ -1,0 +1,7 @@
+cd Desktop/Documents/3sem
+git status
+1) git add path.name
+git add .       добавить все файлы
+git restore --staged file.name     удалить файлы из предкомита
+2) git commit -m "comment"
+3) git push 3sem
