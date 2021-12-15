@@ -1,4 +1,5 @@
 /*скопировать содержимое из одного файла в другой через pread pwrite*/
+//не же самые ошибки что в предыдущей
 #include <stdlib.h>
 #include <stdio.h>
 #include <sys/types.h>
@@ -36,7 +37,7 @@ int main(int argc, char* argv[]) {
     ssize_t countr, countw;
     off_t offset_r = 0, offset_w = 0;
 
-    while ((countr = pread(fd1, text, sb.st_size, offset_r)) > 0) {
+    while ((countr = pread(fd1, buf, sizeof(buf), offset_r)) > 0) {
       offset_r += countr;
       while (countr) {
         countw = pwrite(fd2, text, countr, offset_w);
