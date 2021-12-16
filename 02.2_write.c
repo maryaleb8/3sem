@@ -9,6 +9,8 @@
 #include <string.h>
 
 int main(int argc, char* argv[]) {
+    int result = 0;
+
     if(argc != 3) {
         fprintf(stderr, "Usage: %s filename string\n", argv[0]);
         return 1;
@@ -21,13 +23,12 @@ int main(int argc, char* argv[]) {
     }
     if(dprintf(fd, "%s", argv[2]) < 0) {
         perror("Failure in writing");
-        close(fd);
-        return 3;
+        result = 3;
     }
     if(close(fd) < 0) {
         perror("Failure in close");
-        return 4;
+        result = 4;
     }
 
-    return 0;
+    return result;
 }
