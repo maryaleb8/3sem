@@ -16,33 +16,34 @@ ssize_t write_all(int fd, const void *buf, size_t count)
         if(res < 0) {
             return res;
         }
-        bytes_written += res;
+        bytes_written += (size_t)res;
     }
     return (ssize_t)bytes_written;
 }
 
 
 int main(int argc, char* argv[]) {
+    int result = 0;
+
     if(argc != 3) {
         fprintf(stderr, "Usage: %s filename string\n", argv[0]);
-        return 1;
+        result = 1;
     }
     int fd = open(argv[1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
     if(fd < 0) {
         perror("Failure in opening");
-        return 2;
+        result = 2;
     }
 
     if(write_all(fd, argv[2], strlen(argv[2])) < 0) {
         perror("Failure in writing");
-        close(fd); //один на всех сделать, например через переменную result
-        return 3;
+        result = 3;
     }
 
     if(close(fd) < 0) {
         perror("Failure in close");
-        return 4;
+        result = 4;
     }
 
-    return 0;
+    return result;
 }
