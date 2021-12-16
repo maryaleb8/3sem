@@ -27,12 +27,12 @@ int main(int argc, char* argv[]) {
 
     if(argc != 3) {
         fprintf(stderr, "Usage: %s filename string\n", argv[0]);
-        result = 1;
+        return 1;
     }
     int fd = open(argv[1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
     if(fd < 0) {
         perror("Failure in opening");
-        result = 2;
+        return 2;
     }
 
     if(write_all(fd, argv[2], strlen(argv[2])) < 0) {
