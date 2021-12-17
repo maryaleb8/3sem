@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/stat.h>
+#include <string.h>
 //редактировать библиотеки, могли удалить файл но мы прочитали название
 
 
@@ -46,29 +47,34 @@ int main(int argc, char const *argv[]) {
         perror("Failure in opendir");
         return 2;
     }
+    int result = 0;
 
-    struct dirent * entry;
-  	while(1) {
-		errno = 0;
-	struct dirent *entry = readdir(dir_fd);
-		if (entry == NULL)// нул возвращается не только в плохом случае и нужно обрабатывать
+    while(1) {
+        int errno = 0;
+        struct dirent * entry = readdir(dir_fd);
+		    if(entry == NULL) {
+            if(errno) {
+                perror("readdir");
+                result = 3;
+            }
+            break;
+        }
         char type = dtype_letter(entry->d_type);
         if(type == '?') {
         		struct stat sb;
         		if(lstat(entry->d_name, &sb) == 0) {
                 type = stattype(sb.st_mode);
             }
-            else if(lstat(entry->d_name, &sb) == -1) {
-                perror ("Failure in lstat");
-                return 3;
+            else {
+                fprintf(stderr, "Failed to determine %s type: %s", entry->d_name, strerror(errno));
             }
     		}
-    		printf("%c %s\n", type, entry->d_name);//исправить
+    		printf("%c %s\n", type, entry->d_name);
   	}
 
-    if(closedir(dir_fd) == -1) {//можно не проверять потому что дескриптор норм
+    if(closedir(dir_fd) == -1) {
         perror("Failure in closedir");
-        return 4;
-    }
-	  return 0;
+        result = 4;
+      }
+	 return result;
 }
