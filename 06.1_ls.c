@@ -1,13 +1,11 @@
 /*упрощенный ls -la(в т ч скрытые файлы): вывести список записей в текущем
 каталоге без рекурсии вывести только тип записи, имя записи*/
-//разобраться с отступами
 #include <sys/types.h>
 #include <dirent.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/stat.h>
 #include <string.h>
-//редактировать библиотеки, могли удалить файл но мы прочитали название
 
 
 char dtype_letter(unsigned d_type) {

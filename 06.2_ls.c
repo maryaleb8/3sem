@@ -1,6 +1,5 @@
 /*упрощенный ls -la(в т ч скрытые файлы): вывести список записей в текущем
 каталоге без рекурсии вывести только тип записи, имя записи*/
-// удалить это или разобраться #define _DEFAULT_SOURCE
 #include <sys/types.h>
 #include <dirent.h>
 #include <stdio.h>
@@ -39,16 +38,17 @@ char stattype(unsigned mode) {
 }
 
 int main(int argc, char const *argv[]) {
-    if(argc > 2) {
-        fprintf(stderr, "Usage: %s [namedir]\n", argv[0]);
+    int result = 0;
+    if(argc != 2) {
+        printf("Usage: %s [namedir]\n", argv[0]);
         return 1;
     }
     DIR * dir_fd;
-    if(argc == 2 && chdir(argv[1]) == -1) {// у чидира проблемы убрать их нафиг
+    /*if(argc == 2 && chdir(argv[1]) == -1) {// у чидира проблемы убрать их нафиг
         perror("Failure in chdir");
         return 2;
-    }
-    dir_fd = opendir(".");
+    }*/
+    dir_fd = opendir(argv[1]);
     if(!dir_fd) {
         perror("Failure in opendir");
         return 2;
@@ -64,7 +64,7 @@ int main(int argc, char const *argv[]) {
             }
             else if(lstat(entry->d_name, &sb) == -1) {
                 perror ("Failure in lstat");
-                return 3;
+                result = 3;
             }
     		}
     		printf("%c %s\n", type, entry->d_name);
@@ -74,5 +74,5 @@ int main(int argc, char const *argv[]) {
         perror("Failure in closedir");
         return 4;
     }
-	  return 0;
+	  return result;
 }
