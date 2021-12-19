@@ -35,7 +35,25 @@ int main(int argc, char* argv[]) {
     }
 
     char text [sb.st_size];//слишком мало памяти, нужно авести буфер размера, нужно сравнить числа которые мы считали и изначальный размер файла
-    if (read(fd1, &text, (size_t)sb.st_size) == -1) {
+    int count = 0;
+    int a;
+    while((a = (int)read(fd1, &text, (size_t)sb.st_size)) != -1 && a != 0){
+        count += a;
+        if(dprintf(fd2, "%s", text) < 0) {
+            perror("Failure in writing");
+            result = 7;
+            break;
+        }
+    }
+    
+    int sizef = (int)sb.st_size;
+    if(count != sizef)
+    {
+        perror("Failure in file size");
+        result = 8;
+    }
+
+    /*if (read(fd1, &text, (size_t)sb.st_size) == -1) {
         perror("Failed to read first file");
         result = 6;
     }
@@ -43,7 +61,7 @@ int main(int argc, char* argv[]) {
     if(dprintf(fd2, "%s", text) < 0) {
         perror("Failure in writing");
         result = 7;
-    }
+    }*/
     if(close(fd1) < 0) {
         perror("Failure in close first");
         return 8;
