@@ -27,12 +27,16 @@ int main(void) {
         close(fd1);
         return 2;
     }
-    FILE* counter = fopen("counter.txt", "w+");//содержимое теряется автоматом
-    int number;
+    FILE* counter = fopen("counter.txt", "r");
+    int number = 0;
     if(!fscanf(counter, "%d", &number)) {
         perror("Failure in fscanf");
         result = 3;
     }
+    if(fclose(counter) < 0) {
+        perror("Failure in close by filename");
+    }
+    counter = fopen("counter.txt", "w+");
 
     number++;
 
