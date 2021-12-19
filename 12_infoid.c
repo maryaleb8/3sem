@@ -22,7 +22,7 @@ int main(void){
     struct group * gr;
     for(int i = 0; i < numgroups; i++){
         gr = getgrgid(groups[i]);
-        char * answer;
+        const char * answer;
         if(gr == NULL){
           answer = " ";
         }
