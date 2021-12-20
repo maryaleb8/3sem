@@ -1,12 +1,12 @@
-#include <sys/tipes.h>
+#include <sys/types.h>
 #include <dirent.h>
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
 #include <stdlib.h>
 #include <sys/stat.h>
-//не совпадают названия констант, нужны еще заголовочные файлы
-//для случая когда выпал ? узнаем тщательнее с лстат
+#include <fcntl.h>
+
 char mode_letter(mode_t st_mode) {
     switch (st_mode & S_IFMT) {
         case S_IFBLK: return 'b';
@@ -46,15 +46,18 @@ int main(int argc, char* argv[])
 		}
 		struct dirent *entry;
 		while ((entry = readdir(dir_fd)) != NULL){
-				char type = dtype_letter(entry->dtype);
-				if(type == '?') {
-					srtuct stat sb;
+				char type = dtype_letter(entry->d_type);
+				if(type == '?') {//для случая когда выпал ? узнаем тщательнее с лстат
+					struct stat sb;
 					if(lstat(entry->d_name, &sb) == 0){
-						type = mode_letter(sd.st_mode);
+						type = mode_letter(sb.st_mode);
 					}
 			}
-				printf("%hhu %s\n", entry->d_name, entry->d_name);
+				printf("%s\n", entry->d_name);
 		}
-		closedir(dir_fd);
+    if(closedir(dir_fd) == -1) {
+        perror("Failure in closedir");
+        return 2;
+    }
 		return 0;
 }
