@@ -15,7 +15,6 @@ def main():
 				if obj is sys.stdin:
 					line = sys.stdin.readline().strip()
 					s.send(line.encode('utf-8'))
-
 				else:
 					packet = s.recv(4096)
 					try:
@@ -31,5 +30,4 @@ def main():
 	s.close()
 
 if __name__ == '__main__':
-	main()	
-
+	main()
