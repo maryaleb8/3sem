@@ -14,7 +14,7 @@ int main(void) {
         perror("Failure in opening counter file");
         return 1;
     }
-    if(flock(fd1, LOCK_EX) == -1) {
+    if(lockf(fd1, F_LOCK, 0) == -1) {
         perror("Failure in flock");
         close(fd1);
         return 2;
