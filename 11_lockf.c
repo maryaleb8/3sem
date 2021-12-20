@@ -5,14 +5,6 @@
 #include <sys/file.h>
 #include <unistd.h>
 
-int lennumber(int a){
-    int count = 0;
-    while(a > 0){
-        a = a / 10;
-        count++;
-    }
-    return count;
-}
 
 int main(void) {
     int result = 0;
@@ -27,34 +19,27 @@ int main(void) {
         close(fd1);
         return 2;
     }
-    FILE* counter = fopen("counter.txt", "r");
-    int number = 0;
-    if(!fscanf(counter, "%d", &number)) {
-        perror("Failure in fscanf");
-        result = 3;
+    FILE* counter = fdopen(fd1, "r+");
+    int number;
+    if(fscanf(counter, "%d", &number) != 1) {
+        if(ferror(counter) != 0){
+          perror("Failure in fscanf");
+          return 3;
+        }
+        number = 0;
     }
-    if(fclose(counter) < 0) {
-        perror("Failure in close by filename");
-    }
-    counter = fopen("counter.txt", "w+");
+    rewind(counter);
 
     number++;
 
-    if(fprintf(counter, "%d", number) != lennumber(number)){
+    if(fprintf(counter, "%d", number) < 0){
         perror("Failure in fprintf");
         result = 4;
     }
-    if(flock(fd1, LOCK_UN) == -1) {
-        perror("Failure in unlocking");
-        result = 5;
-    }
-    if(close(fd1) < 0) {
-        perror("Failure in close by fd");
-        return 6;
-    }
+    //fflush чтобы очистить буфер
     if(fclose(counter) < 0) {
         perror("Failure in close by filename");
-        return 7;
+        return 5;
     }
     return result;
 }
